@@ -1,4 +1,5 @@
 require 'vcr'
+require 'fileutils'
 
 module Televideo
   class Server
@@ -16,6 +17,7 @@ module Televideo
     end
 
     def call(env)
+      mkdir_p_cassette_dir_from_env(env)
       name = cassette_name_from_env(env)
       res = VCR::use_cassette(name, @vcr_options) { run_request(env) }
       [
@@ -26,6 +28,7 @@ module Televideo
     end
 
     private
+
 
     def run_request(env)
       orig_req = Rack::Request.new(env)
@@ -52,6 +55,15 @@ module Televideo
 
         http.request(req)
       end
+    end
+
+    def mkdir_p_cassette_dir_from_env(env)
+      path = File.join(
+        VCR.configuration.cassette_library_dir,
+        cassette_name_from_env(env),
+      )
+      dir = File.dirname(path)
+      FileUtils.mkdir_p(dir)
     end
 
     def cassette_name_from_env(env)
