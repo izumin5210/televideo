@@ -1,0 +1,8 @@
+*
+
+!Gemfile
+!televideo.gemspec
+
+!lib/*
+
+!config.ru

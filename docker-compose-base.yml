@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  televideo:
+    build:
+      context: .
+    command: bundle exec rackup --port 80 --host "0.0.0.0"
+    volumes:
+    - bundle_install:/app/vendor/bundle
+    - bundle:/app/.bundle
